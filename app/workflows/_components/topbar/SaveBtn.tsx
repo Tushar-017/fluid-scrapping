@@ -41,6 +41,7 @@ export default function SaveBtn({ workflowId }: { workflowId?: string }) {
       variant={"outline"}
       className="flex items-center gap-2"
       onClick={handleSave}
+      disabled={saveMutation.isPending}
     >
       <CheckIcon size={16} className="stroke-green-400" />
       Save

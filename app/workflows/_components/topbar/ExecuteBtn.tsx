@@ -14,8 +14,6 @@ export default function ExecuteBtn({ workflowId }: { workflowId: string }) {
       data-workflow-id={workflowId}
       onClick={() => {
         const executionPlan = generate();
-        console.log("---plan----");
-        console.table(executionPlan);
       }}
     >
       <PlayIcon size={16} className="stroke-orange-400" />

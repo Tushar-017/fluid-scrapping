@@ -22,6 +22,7 @@ function layout({ children }: { children: React.ReactNode }) {
         <Separator />
         <div className="overflow-auto flex-1">
           <div className="container py-4 text-accent-foreground">
+            {/* this is where the page content will be rendered */}
             {children}
           </div>
         </div>

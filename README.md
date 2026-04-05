@@ -139,34 +139,12 @@ npm run dev
 
 Open `http://localhost:3000`
 
-## Setup On macOS
+## Setup
 
 1. Install Node.js.
    Recommended: install it from `https://nodejs.org` or with Homebrew using `brew install node`.
 2. Clone the repo.
 3. Open the project in Terminal.
-4. Run `npm install`.
-5. Create the `.env` file with your Clerk keys.
-6. Run `npx prisma migrate dev`.
-7. Run `npm run dev`.
-8. Visit `http://localhost:3000`.
-
-## Setup On Windows
-
-1. Install Node.js from `https://nodejs.org`.
-2. Clone the repo.
-3. Open the folder in PowerShell or Windows Terminal.
-4. Run `npm install`.
-5. Create a `.env` file in the project root with the Clerk values shown above.
-6. Run `npx prisma migrate dev`.
-7. Run `npm run dev`.
-8. Visit `http://localhost:3000`.
-
-## Setup On Linux
-
-1. Install Node.js 20+ using your package manager or `nvm`.
-2. Clone the repo.
-3. Open the project directory in your terminal.
 4. Run `npm install`.
 5. Create the `.env` file with your Clerk keys.
 6. Run `npx prisma migrate dev`.

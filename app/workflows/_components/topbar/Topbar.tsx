@@ -12,8 +12,14 @@ interface TopBarProps {
   title: string;
   subtitle?: string;
   workflowId: string;
+  hideActionBtns?: boolean;
 }
-function TopBar({ title, subtitle, workflowId }: TopBarProps) {
+function TopBar({
+  title,
+  subtitle,
+  workflowId,
+  hideActionBtns = false,
+}: TopBarProps) {
   const router = useRouter();
 
   return (
@@ -31,9 +37,14 @@ function TopBar({ title, subtitle, workflowId }: TopBarProps) {
           )}
         </div>
       </div>
+
       <div className="flex gap-1 flex-1 justify-end">
-        <ExecuteBtn workflowId={workflowId} />
-        <SaveBtn workflowId={workflowId} />
+        {!hideActionBtns && (
+          <>
+            <ExecuteBtn workflowId={workflowId} />
+            <SaveBtn workflowId={workflowId} />
+          </>
+        )}
       </div>
     </header>
   );

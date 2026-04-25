@@ -10,6 +10,10 @@ export function DatesToDurationString(
 
   const timeElapsed = end.getTime() - start.getTime();
 
+  if (timeElapsed < 0) {
+    return null;
+  }
+
   if (timeElapsed < 1000) {
     return `${timeElapsed} ms`;
   }

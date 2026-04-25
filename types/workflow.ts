@@ -4,7 +4,7 @@ import { AppNode } from "./appNode";
 
 export enum WorkflowStatus {
   DRAFT = "DRAFT",
-  INACTIVE = "PUBLISHED",
+  PUBLISHED = "PUBLISHED",
 }
 
 export type WorkflowTask = {

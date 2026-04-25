@@ -20,7 +20,7 @@ export async function LaunchBrowserExecutor(
     environment.log.info(`Navigated to page: ${websiteUrl}`);
     return true;
   } catch (error: any) {
-    environment.log.error(`Error launching browser: ${error.message}`);
+    environment.log.error(`${error.message}`);
     return false;
   }
 }

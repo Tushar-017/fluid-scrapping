@@ -41,8 +41,9 @@ import {
   LucideIcon,
   WorkflowIcon,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PhaseStatusBadge from "./PhaseStatusBadge";
+import ReactCountUpWrapper from "@/components/ReactCountUpWrapper";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -68,6 +69,22 @@ function ExecutionViewer({
 
   const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;
 
+  useEffect(() => {
+    const phases = query.data?.phases || [];
+    if (isRunning) {
+      const phaseToSelect = phases.toSorted((a, b) =>
+        a.startedAt! > b.startedAt! ? -1 : 1,
+      )[0];
+
+      setSelectedPhase(phaseToSelect.id);
+      return;
+    }
+    const phaseToSelect = phases.toSorted((a, b) =>
+      a.completedAt! > b.completedAt! ? -1 : 1,
+    )[0];
+    setSelectedPhase(phaseToSelect.id);
+  }, [query.data?.phases, isRunning, setSelectedPhase]);
+
   const duration = DatesToDurationString(
     query.data?.startedAt,
     query.data?.completedAt,
@@ -82,7 +99,14 @@ function ExecutionViewer({
           <ExecutionLabel
             icon={CircleDashedIcon}
             label="Status"
-            value={query.data?.status ?? "unknown"}
+            value={
+              <div className="font-semibold capitalize flex gap-2 items-center">
+                <PhaseStatusBadge
+                  status={query.data?.status as ExecutionPhaseStatus}
+                />
+                <span>{query.data?.status}</span>
+              </div>
+            }
           />
           <ExecutionLabel
             icon={CalendarIcon}
@@ -111,7 +135,7 @@ function ExecutionViewer({
           <ExecutionLabel
             icon={CoinsIcon}
             label="Credits consumed"
-            value={creditsConsumed}
+            value={<ReactCountUpWrapper value={creditsConsumed} />}
           />
         </div>
         <Separator />
@@ -167,7 +191,7 @@ function ExecutionViewer({
                   <CoinsIcon size={18} className="text-muted-foreground/80" />
                   <span>Credits</span>
                 </div>
-                <span>TODO</span>
+                <span>{phaseDetails.data.creditsConsumed}</span>
               </Badge>
               <Badge variant={"outline"} className="space-x-4">
                 <div className="flex gap-1 item-center">
@@ -222,9 +246,7 @@ function ExecutionLabel({
         <Icon size={20} className="text-muted-foreground/80" />
         <span>{label}</span>
       </div>
-      <div className="font-semibold lowercase flex gap-2 items-center">
-        {value}
-      </div>
+      <div className="font-semibold  flex gap-2 items-center">{value}</div>
     </div>
   );
 }

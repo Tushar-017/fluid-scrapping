@@ -9,6 +9,7 @@ import {
   WorkflowExecutionPlan,
   WorkflowExecutionStatus,
   WorkflowExecutionTrigger,
+  WorkflowStatus,
 } from "@/types/workflow";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
@@ -42,22 +43,30 @@ export async function RunWorkflow(form: {
   }
 
   let executionPlan: WorkflowExecutionPlan;
-  if (!flowDefinition) {
-    throw new Error("flowDefinition is required");
+  if (workflow.status === WorkflowStatus.PUBLISHED) {
+    if (!workflow.executionPlan) {
+      throw new Error("execution plan not found for published workflow");
+    }
+    executionPlan = JSON.parse(workflow.executionPlan);
+  } else {
+    if (!flowDefinition) {
+      throw new Error("flowDefinition is required");
+    }
+
+    const flow = JSON.parse(flowDefinition);
+    const result = FlowToExecutionPlan(flow.nodes, flow.edges);
+
+    if (result.error) {
+      throw new Error("flow definition not valid");
+    }
+
+    if (!result.executionPlan) {
+      throw new Error("execution plan generation failed");
+    }
+
+    executionPlan = result.executionPlan;
   }
 
-  const flow = JSON.parse(flowDefinition);
-  const result = FlowToExecutionPlan(flow.nodes, flow.edges);
-
-  if (result.error) {
-    throw new Error("flow definition not valid");
-  }
-
-  if (!result.executionPlan) {
-    throw new Error("execution plan generation failed");
-  }
-
-  executionPlan = result.executionPlan;
   console.log("Execution plan", executionPlan);
 
   const execution = await prisma.workflowExecution.create({

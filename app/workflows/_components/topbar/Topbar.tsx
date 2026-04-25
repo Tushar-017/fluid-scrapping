@@ -7,18 +7,23 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import SaveBtn from "./SaveBtn";
 import ExecuteBtn from "./ExecuteBtn";
+import NavigationTabs from "./NavigationTabs";
+import PublishBtn from "./PublishBtn";
+import UnpublishBtn from "./UnpublishBtn";
 
 interface TopBarProps {
   title: string;
   subtitle?: string;
   workflowId: string;
   hideActionBtns?: boolean;
+  isPublished?: boolean;
 }
 function TopBar({
   title,
   subtitle,
   workflowId,
   hideActionBtns = false,
+  isPublished = false,
 }: TopBarProps) {
   const router = useRouter();
 
@@ -37,12 +42,17 @@ function TopBar({
           )}
         </div>
       </div>
-
+      <NavigationTabs workflowId={workflowId} />
       <div className="flex gap-1 flex-1 justify-end">
         {!hideActionBtns && (
           <>
             <ExecuteBtn workflowId={workflowId} />
-            <SaveBtn workflowId={workflowId} />
+            {!isPublished && <SaveBtn workflowId={workflowId} />}
+            {isPublished ? (
+              <UnpublishBtn workflowId={workflowId} />
+            ) : (
+              <PublishBtn workflowId={workflowId} />
+            )}
           </>
         )}
       </div>
